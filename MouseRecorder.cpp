@@ -6,7 +6,7 @@ using namespace std;
 void getCursorPos();
 void click(int, int);
 
-int main()
+void startRecording()
 {
     bool exit = false;
     while(!exit)
