@@ -36,7 +36,7 @@ void menuOptions()
         {
         case '1' :
         {
-            startRecording();
+            recorderMenu();
             break;
         }
         case '2' :

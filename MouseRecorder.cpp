@@ -1,56 +1,55 @@
 #include <iostream>
 #include <windows.h>
+#include <vector>
+#include "Mouse.cpp"
 
 using namespace std;
 
-void getCursorPos();
-void click(int, int);
+void getInfo();
+void startRecording();
+void playRecordedPositions(vector<Mouse>);
+void click(Mouse);
+
+void recorderMenu()
+{
+    getInfo();
+    startRecording();
+}
+
+void getInfo()
+{
+    system("cls");
+    cout<<"1. Move mouse on the position of the screen that you want to record and then press left button on your mouse to save that position."<<endl;
+    cout<<"2. When you finished recording, tap F1 to save your progress"<<endl;
+    cout<<"3. Chose how many times program should repeat recorded positions."<<endl;
+    cout<<"4. To stop - press F2 if you wish to stop at any time."<<endl;
+    system("pause");
+}
 
 void startRecording()
 {
-    bool exit = false;
-    while(!exit)
+    vector<Mouse> mousePositions = {};
+    while(true)
     {
+        if (GetAsyncKeyState(VK_LBUTTON))
+        {
+            mousePositions.push_back(Mouse());
+            Sleep(200);
+        }
         if (GetAsyncKeyState(VK_F1))
         {
-            while(!exit)
-            {
-                click(312,1029);
-                click(415,1029);
-                click(524,1029);
-                click(634,1029);
-                click(741,1029);
-                click(916,976);
-            }
-        }
-        if (GetAsyncKeyState(VK_F2))
-        {
-            exit = true;
+            break;
         }
     }
+    cout<<"Stopped!"<<endl;
+    system("pause");
+    playRecordedPositions(mousePositions);
 }
 
-void getCursorPos()
+void playRecordedPositions(vector<Mouse> mousePositions)
 {
-    int x;
-    int y;
-    POINT cursorPosition;
-    GetCursorPos(&cursorPosition);
-    x = cursorPosition.x;
-    y = cursorPosition.y;
-    cout << "Mouse X = " << x << endl;
-    cout << "Mouse Y = " << y << endl;
-}
-
-void click(int x, int y)
-{
-    if (GetAsyncKeyState(VK_F2))
+    for(Mouse mouse : mousePositions)
     {
-        //stop running after F2
-        exit(0);
+        mouse.click();
     }
-    SetCursorPos(x,y);
-    mouse_event(MOUSEEVENTF_LEFTDOWN, x, y, 0, 0);
-    mouse_event(MOUSEEVENTF_LEFTUP, x, y, 0, 0);
-    Sleep(1000);
 }
